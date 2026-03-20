@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  server:
+    image: python:3.10-slim
+    container_name: mock-server
+    volumes:
+      - ./server.py:/app/server.py
+    working_dir: /app
+    command: python server.py
+    ports:
+      - "8080:8080"
+
+  client:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: cpp-client
+    depends_on:
+      - server
+    volumes:
+      - ./hashrate.txt:/app/hashrate.txt
+    command: ["server", "8080", "/app/hashrate.txt"]
