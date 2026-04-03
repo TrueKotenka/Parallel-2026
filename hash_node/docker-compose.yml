@@ -2,19 +2,17 @@ version: '3.8'
 
 services:
   server:
-    image: python:3.10-slim
-    container_name: mock-server
-    volumes:
-      - ./server.py:/app/server.py
-    working_dir: /app
-    command: python server.py
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: cpp-server
     ports:
       - "8080:8080"
 
   client:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.client
     container_name: cpp-client
     depends_on:
       - server
