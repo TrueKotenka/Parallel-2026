@@ -59,7 +59,7 @@ int main() {
         }
     }
 
-    std::cout << "Store-Load reordering detected on x86: " 
+    std::cout << "Store-Load reordering detected: " 
               << detected << " times out of " << iterations << "\n";
 
     // Убиваем потоки (для простоты примера)

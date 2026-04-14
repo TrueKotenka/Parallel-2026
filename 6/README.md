@@ -16,10 +16,10 @@
 ## Результаты
 ``` bash
 === Запуск на x86 (Native) ===
-Store-Load reordering detected on x86: 0 times out of 500000
+Store-Load reordering detected: 0 times out of 500000
 
 === Запуск на ARM (QEMU) ===
-Store-Load reordering detected on x86: 1231 times out of 500000
+Store-Load reordering detected: 1231 times out of 500000
 ```
 
 ## Суть эксперимента
