@@ -16,8 +16,8 @@ void thread1() {
     while (true) {
         sem_begin1.acquire(); // Ждем старта итерации
         
-        X.store(1, std::memory_order_seq_cst); // Store X
-        r1 = Y.load(std::memory_order_seq_cst); // Load Y
+        X.store(1, std::memory_order_relaxed); // Store X
+        r1 = Y.load(std::memory_order_relaxed); // Load Y
         
         sem_end1.release(); // Сообщаем о завершении
     }
@@ -27,8 +27,8 @@ void thread2() {
     while (true) {
         sem_begin2.acquire(); // Ждем старта итерации
         
-        Y.store(1, std::memory_order_seq_cst); // Store Y
-        r2 = X.load(std::memory_order_seq_cst); // Load X
+        Y.store(1, std::memory_order_relaxed); // Store Y
+        r2 = X.load(std::memory_order_relaxed); // Load X
         
         sem_end2.release(); // Сообщаем о завершении
     }
@@ -42,8 +42,8 @@ int main() {
     const int iterations = 500000;
 
     for (int i = 0; i < iterations; ++i) {
-        X.store(0, std::memory_order_seq_cst);
-        Y.store(0, std::memory_order_seq_cst);
+        X.store(0, std::memory_order_relaxed);
+        Y.store(0, std::memory_order_relaxed);
 
         // Запускаем оба потока одновременно
         sem_begin1.release();
