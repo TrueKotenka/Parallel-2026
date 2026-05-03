@@ -16,11 +16,9 @@
 #include <mutex>
 #include <condition_variable>
 #include <functional>
-#include <atomic>
 
 std::mutex mtx;
-std::condition_variable cv_h;
-std::condition_variable cv_o;
+std::condition_variable cv;
 
 int h_count = 0;
 int o_count = 0;
@@ -28,29 +26,35 @@ int o_count = 0;
 void hydrogen()
 {
     std::unique_lock<std::mutex> lk(mtx);
-    if (h_count == 2) {
-        cv_h.notify_one();
-        cv_o.wait(lk, []{return o_count == 1;});
+    
+    cv.wait(lk, [] { return h_count < 2; });
+    
+    h_count++;
+    std::cout << "H";
+    
+    if (h_count == 2 && o_count == 1) {
         h_count = 0;
         o_count = 0;
     }
-    lk.unlock();
-    std::cout << "H";
-    h_count++;
+    
+    cv.notify_all();
 }
 
 void oxygen() 
 {
     std::unique_lock<std::mutex> lk(mtx);
-    if (o_count == 1) {
-        cv_o.notify_one();
-        cv_h.wait(lk, []{return h_count == 2;});
+    
+    cv.wait(lk, [] { return o_count < 1; });
+    
+    o_count++;
+    std::cout << "O";
+    
+    if (h_count == 2 && o_count == 1) {
         h_count = 0;
         o_count = 0;
     }
-    lk.unlock();
-    std::cout << "O";
-    o_count++;
+    
+    cv.notify_all();
 }
 
 int main()
