@@ -67,8 +67,9 @@ namespace concurrent {
                         uintptr_t expected = reinterpret_cast<uintptr_t>(curr);
                         uintptr_t desired = reinterpret_cast<uintptr_t>(succ);
                         snip = pred->next.compare_exchange_strong(expected, desired, std::memory_order_release, std::memory_order_relaxed);
-                        if (!snip) goto retry; // Если другой поток вмешался, начинаем сначала
-                        
+                        if (!snip) {
+                            break; // Если другой поток вмешался, начинаем сначала
+                        }
                         // По хорошему здесь должна быть система сборки мусора
                         
                         curr = succ;
