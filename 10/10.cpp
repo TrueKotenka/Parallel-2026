@@ -49,7 +49,6 @@ namespace concurrent {
             bool marked = false;
             bool snip;
 
-        retry:
             while (true) {
                 pred = head_node;
                 uintptr_t curr_ptr = pred->next.load(std::memory_order_acquire);
